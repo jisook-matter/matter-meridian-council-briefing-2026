@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — Flood Early Warning for Your Council | Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-900:#08243A; --navy-800:#0E3F63; --navy:#175787;
+  --blue-600:#2A6FA8; --blue:#3E8DD6; --blue-300:#7FB4E4;
+  --blue-200:#B8D6F0; --blue-100:#E3EEF9; --droplet:#C1E4F8;
+  --mist:#F4F8FC; --paper:#fff; --pink:#F288DE;
+  --ink:#0F2233; --ink-soft:#54718B; --rule:#DBE7F2;
+  --r:22px; --shadow:0 1px 2px rgba(8,36,58,.04),0 12px 32px -16px rgba(8,36,58,.18);
+  --shadow-lift:0 2px 4px rgba(8,36,58,.05),0 26px 50px -20px rgba(8,36,58,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{font-family:'Poppins',system-ui,sans-serif;color:var(--ink);background:var(--mist);
+  line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;font-size:16px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+h1,h2,h3,h4{line-height:1.15;font-weight:700;letter-spacing:-.02em}
+
+/* ---------- progress + nav ---------- */
+#bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;
+  background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .1s linear}
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--rule)}
+.navin{max-width:1080px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:28px}
+.navlogo{width:104px;flex:none;display:block}
+.navlinks{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.navlinks a{color:var(--ink-soft);text-decoration:none;font-size:13.5px;font-weight:500;
+  position:relative;padding:3px 0;transition:color .2s}
+.navlinks a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;
+  background:var(--blue);border-radius:2px;transition:width .25s}
+.navlinks a:hover{color:var(--navy)}.navlinks a:hover::after{width:100%}
+@media(max-width:860px){.navlinks{display:none}}
+
+/* ---------- hero ---------- */
+header{position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(155deg,var(--navy-900) 0%,var(--navy) 52%,var(--blue-600) 100%)}
+header::before,header::after{content:'';position:absolute;border-radius:50%;pointer-events:none}
+header::before{width:620px;height:620px;top:-280px;right:-160px;
+  background:radial-gradient(circle,rgba(62,141,214,.5),transparent 68%)}
+header::after{width:520px;height:520px;bottom:-300px;left:-140px;
+  background:radial-gradient(circle,rgba(242,136,222,.22),transparent 70%)}
+.ripple{position:absolute;inset:0;opacity:.16;pointer-events:none}
+.heroin{position:relative;z-index:2;padding:96px 0 84px}
+.herologo{width:168px;margin-bottom:56px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 16px 7px 13px;
+  border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.24);
+  font-size:12.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:26px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--pink);
+  box-shadow:0 0 0 4px rgba(242,136,222,.28)}
+h1{font-size:clamp(2.5rem,6.2vw,4.35rem);font-weight:700;letter-spacing:-.035em;max-width:15ch}
+h1 .accent{color:var(--blue-300)}
+h1 .pk{color:var(--pink)}
+.lede{margin-top:26px;max-width:56ch;font-size:clamp(1.02rem,1.7vw,1.2rem);
+  color:rgba(255,255,255,.84);font-weight:300;line-height:1.68}
+.meta{margin-top:52px;padding-top:26px;border-top:1px solid rgba(255,255,255,.18);
+  display:flex;gap:44px;flex-wrap:wrap}
+.meta b{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);font-weight:600;margin-bottom:5px}
+.meta span{font-size:15px;font-weight:500}
+
+/* ---------- sections ---------- */
+section{padding:92px 0;border-bottom:1px solid var(--rule)}
+section.alt{background:var(--paper)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+.tag.pk{color:var(--pink)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem);max-width:20ch;color:var(--navy-900)}
+.sub{margin-top:20px;max-width:62ch;font-size:1.05rem;color:var(--ink-soft);font-weight:300}
+h3{font-size:1.28rem;color:var(--navy);margin-bottom:10px}
+h4{font-size:1rem;font-weight:600;color:var(--navy-900)}
+.mt{margin-top:52px}.mt-s{margin-top:32px}
+
+/* ---------- cards / grids ---------- */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:880px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px;box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift)}
+section.alt .card{background:var(--mist)}
+.chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 11px;border-radius:999px;
+  background:var(--blue-100);color:var(--blue-600);margin-bottom:14px}
+.chip.act{background:rgba(242,136,222,.16);color:#B4459C}
+.card p{font-size:.94rem;color:var(--ink-soft);font-weight:300}
+
+/* numbered steps */
+.steps{counter-reset:s;display:grid;gap:18px;grid-template-columns:repeat(4,1fr)}
+@media(max-width:880px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.step{position:relative;background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--r);padding:28px 24px}
+section.alt .step{background:var(--mist)}
+.step .n{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--navy),var(--blue));color:#fff;
+  font-weight:700;font-size:1rem;margin-bottom:16px;box-shadow:0 8px 18px -8px rgba(23,87,135,.7)}
+.step p{font-size:.92rem;color:var(--ink-soft);font-weight:300}
+.step strong{color:var(--navy);font-weight:600}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:880px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 24px;text-align:center}
+section.alt .stat{background:var(--mist)}
+.stat .v{font-size:clamp(1.9rem,4vw,2.6rem);font-weight:700;letter-spacing:-.035em;
+  color:var(--blue);line-height:1}
+.stat .l{margin-top:9px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-soft);font-weight:600}
+
+/* compare */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.cmp{grid-template-columns:1fr}}
+.panel{border-radius:var(--r);padding:32px;border:1px solid var(--rule);background:var(--paper)}
+.panel.win{background:linear-gradient(160deg,var(--navy-900),var(--navy));border-color:transparent;color:#fff}
+.panel h4{margin-bottom:20px;font-size:.8rem;letter-spacing:.13em;text-transform:uppercase}
+.panel.win h4{color:var(--blue-300)}
+.panel ul{list-style:none;display:grid;gap:15px}
+.panel li{display:flex;gap:13px;font-size:.94rem;font-weight:300;line-height:1.55}
+.panel.win li{color:rgba(255,255,255,.9)}
+.mk{flex:none;width:21px;height:21px;border-radius:7px;display:grid;place-items:center;
+  font-size:11px;font-weight:700;margin-top:2px}
+.mk.no{background:#E9EEF3;color:var(--ink-soft)}
+.mk.yes{background:rgba(255,255,255,.16);color:#fff}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:.94rem}
+.tbl th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft);font-weight:700;padding:0 18px 13px;border-bottom:2px solid var(--rule)}
+.tbl td{padding:17px 18px;border-bottom:1px solid var(--rule);font-weight:300;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{font-weight:500;color:var(--navy-900)}
+.tbl tr:hover td{background:var(--blue-100)}
+.tbl .num{font-weight:600;color:var(--navy);white-space:nowrap}
+.tbl tr.total td{background:var(--navy-900);color:#fff;border-bottom:none}
+.tbl tr.total:hover td{background:var(--navy-900)}
+.tbl tr.total td:first-child{color:#fff}
+.tbl tr.total .num{color:var(--blue-300)}
+.tblwrap{overflow-x:auto;background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+section.alt .tblwrap{background:var(--mist)}
+
+/* callout */
+.callout{margin-top:32px;border-radius:var(--r);padding:30px 34px;
+  background:linear-gradient(140deg,var(--navy-900),var(--navy));color:#fff;
+  display:flex;gap:26px;align-items:flex-start}
+.callout .kd{flex:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--pink);font-weight:700;padding-top:4px;width:96px}
+.callout p{font-size:1rem;font-weight:300;color:rgba(255,255,255,.9)}
+.callout strong{color:#fff;font-weight:600}
+@media(max-width:640px){.callout{flex-direction:column;gap:12px}.callout .kd{width:auto}}
+
+/* rule list */
+.rlist{list-style:none;display:grid;gap:12px;margin-top:18px}
+.rlist li{display:flex;gap:12px;font-size:.93rem;font-weight:300;color:var(--ink-soft);line-height:1.55}
+.rlist li::before{content:'';flex:none;width:6px;height:6px;border-radius:50%;
+  background:var(--blue);margin-top:9px}
+
+/* timeline */
+.tl{position:relative;display:grid;gap:0;margin-top:44px}
+.tl::before{content:'';position:absolute;left:19px;top:12px;bottom:12px;width:2px;
+  background:linear-gradient(180deg,var(--blue),var(--blue-200))}
+.tlrow{position:relative;padding:0 0 34px 62px}
+.tlrow:last-child{padding-bottom:0}
+.tlrow .mark{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--blue);display:grid;place-items:center;
+  font-weight:700;font-size:.85rem;color:var(--navy);z-index:2}
+section.alt .tlrow .mark{background:var(--mist)}
+
+/* faq */
+details{background:var(--paper);border:1px solid var(--rule);border-radius:16px;
+  margin-bottom:12px;overflow:hidden;transition:box-shadow .25s}
+section.alt details{background:var(--mist)}
+details[open]{box-shadow:var(--shadow)}
+summary{padding:22px 26px;cursor:pointer;font-weight:600;font-size:1rem;color:var(--navy-900);
+  list-style:none;display:flex;align-items:center;gap:16px;transition:color .2s}
+summary::-webkit-details-marker{display:none}
+summary:hover{color:var(--blue)}
+summary::after{content:'+';margin-left:auto;font-size:1.5rem;font-weight:300;color:var(--blue);
+  transition:transform .3s;line-height:1}
+details[open] summary::after{transform:rotate(45deg)}
+details .body{padding:0 26px 24px;font-size:.94rem;font-weight:300;color:var(--ink-soft);line-height:1.7}
+details .body strong{color:var(--navy);font-weight:600}
+
+/* contact + footer */
+.final{background:linear-gradient(155deg,var(--navy-900),var(--navy) 60%,var(--blue-600));
+  color:#fff;border:none;position:relative;overflow:hidden}
+.final::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;
+  bottom:-320px;right:-160px;background:radial-gradient(circle,rgba(242,136,222,.2),transparent 70%)}
+.final .wrap{position:relative;z-index:2}
+.final h2{color:#fff}.final .sub{color:rgba(255,255,255,.8)}
+.final .tag{color:var(--pink)}
+.fcard{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--r);padding:28px}
+.fcard h4{color:#fff;margin-bottom:12px;font-size:.78rem;letter-spacing:.13em;text-transform:uppercase}
+.fcard p{font-size:.94rem;color:rgba(255,255,255,.82);font-weight:300}
+.fcard a{color:var(--blue-300);text-decoration:none;font-weight:500}
+.fcard a:hover{color:#fff}
+.cta{display:inline-flex;align-items:center;gap:12px;margin-top:40px;padding:17px 34px;
+  border-radius:999px;background:#fff;color:var(--navy);font-weight:600;font-size:1rem;
+  text-decoration:none;transition:transform .25s,box-shadow .25s;box-shadow:0 16px 34px -14px rgba(0,0,0,.5)}
+.cta:hover{transform:translateY(-3px);box-shadow:0 22px 44px -14px rgba(0,0,0,.55)}
+footer{background:var(--navy-900);color:rgba(255,255,255,.55);padding:46px 0;font-size:13.5px}
+footer .fin{display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap}
+.footlogo{width:112px;opacity:.95}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}.card:hover{transform:none}}
+
+@media print{
+  nav,#bar,.cta{display:none!important}
+  body{background:#fff;font-size:11pt}
+  section{padding:24px 0;break-inside:avoid;border-bottom:1px solid #ccc}
+  header{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card,.stat,.step,.tblwrap,details{box-shadow:none;break-inside:avoid}
+  .rv{opacity:1;transform:none}
+  .panel.win,.callout,.final{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<nav>
+  <div class="navin">
+    <a href="#top" class="navlogo" aria-label="Matter home"><svg style="width:100%;height:auto;display:block"  data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1259 257.45">
+  <defs>
+    <style>
+      .mlc-1 {
+        fill: #c1e4f8;
+      }
+
+      .mlc-2 {
+        fill: #165888;
+      }
+
+      .mlc-3 {
+        fill: #fff;
+      }
+
+      .mlc-4 {
+        fill: #448cca;
+      }
+    </style>
+  </defs>
+  <g  data-name="Layer 2">
+    <g  data-name="Layer 5">
+      <g>
+        <g>
+          <path class="mlc-2" d="M0,57.8h67.92v23.64c18.51-17.76,39.27-26.65,62.29-26.65,28.52,0,50.28,12.01,65.29,36.03,15.26-24.27,37.02-36.41,65.29-36.41,9.01,0,17.51,1.31,25.51,3.94,8,2.63,14.88,6.75,20.64,12.38,5.75,5.63,10.32,12.95,13.7,21.96,3.38,9.01,5.07,19.89,5.07,32.65v124.98h-67.92v-94.95c0-9.76-.69-17.76-2.06-24.02-1.38-6.25-3.38-11.13-6-14.64-2.63-3.5-5.69-5.88-9.19-7.13s-7.26-1.88-11.26-1.88c-21.76,0-32.64,15.89-32.64,47.66v94.95h-67.92v-94.95c0-9.76-.63-17.83-1.88-24.21-1.26-6.38-3.07-11.45-5.44-15.2-2.38-3.75-5.44-6.32-9.19-7.69s-8.13-2.06-13.13-2.06c-4.26,0-8.26.63-12.01,1.88s-7.07,3.69-9.94,7.32c-2.88,3.63-5.13,8.63-6.75,15.01-1.63,6.38-2.44,14.7-2.44,24.96v94.95H0V57.8Z"/>
+          <path class="mlc-2" d="M675.44,114.47v135.86h-67.92V114.47h-22.51v-56.67h22.51V0h67.92v57.8h38.65v56.67h-38.65Z"/>
+          <path class="mlc-2" d="M800.88,114.47v135.86h-67.92V114.47h-22.51v-56.67h22.51V0h67.92v57.8h38.65v56.67h-38.65Z"/>
+          <path class="mlc-2" d="M908.82,165.51c0,29.27,13.75,43.91,41.28,43.91,14.76,0,25.89-6.01,33.39-18.02h65.67c-13.26,44.04-46.41,66.05-99.44,66.05-16.26,0-31.14-2.44-44.65-7.32s-25.08-11.82-34.71-20.83-17.07-19.76-22.33-32.28c-5.25-12.51-7.88-26.52-7.88-42.03s2.5-30.46,7.5-43.35c5-12.88,12.13-23.83,21.39-32.84,9.25-9.01,20.45-15.95,33.58-20.83s27.96-7.32,44.47-7.32,30.89,2.44,43.9,7.32c13,4.88,24.02,11.95,33.02,21.2,9,9.26,15.88,20.58,20.64,33.97,4.75,13.39,7.13,28.47,7.13,45.23v7.13h-142.96ZM988.37,126.1c-2.25-9.51-6.89-17.13-13.88-22.89-7.01-5.75-15.51-8.63-25.51-8.63-10.51,0-19.08,2.76-25.71,8.26-6.63,5.51-10.82,13.27-12.57,23.27h77.67Z"/>
+          <path class="mlc-2" d="M1072.01,57.8h67.92v31.53c7.25-11.51,16.13-20.33,26.64-26.46,10.51-6.13,22.76-9.19,36.78-9.19h5.82c2.12,0,4.56.25,7.32.75v64.93c-9.01-4.5-18.76-6.76-29.27-6.76-15.76,0-27.58,4.69-35.46,14.07-7.88,9.38-11.82,23.08-11.82,41.1v82.57h-67.92V57.8h-.01Z"/>
+          <path class="mlc-4" d="M1193.15,223.31c0-4.5.84-8.77,2.53-12.81,1.69-4.03,4.03-7.55,7.04-10.56,3-3,6.52-5.35,10.55-7.04,4.03-1.69,8.3-2.53,12.8-2.53s8.77.84,12.81,2.53c4.03,1.69,7.55,4.04,10.55,7.04s5.35,6.52,7.04,10.56c1.69,4.04,2.53,8.3,2.53,12.81s-.85,8.77-2.53,12.81c-1.69,4.04-4.04,7.56-7.04,10.56s-6.52,5.35-10.55,7.04c-4.04,1.69-8.3,2.53-12.81,2.53s-8.77-.84-12.8-2.53c-4.04-1.69-7.56-4.03-10.55-7.04-3-3-5.35-6.52-7.04-10.56-1.69-4.03-2.53-8.3-2.53-12.81h0Z"/>
+          <path class="mlc-2" d="M500.25,57.8v19.16c-15.76-16.76-35.65-25.15-59.66-25.15-14.26,0-27.27,2.69-39.03,8.07-11.76,5.39-21.89,12.71-30.39,21.96-8.51,9.25-15.14,20.07-19.89,32.46-4.76,12.39-7.13,25.46-7.13,39.22,0,14.77,2.44,28.4,7.32,40.91,4.88,12.51,11.69,23.4,20.45,32.65,8.75,9.26,19.01,16.45,30.77,21.58,11.75,5.12,24.64,7.69,38.65,7.69,24.77,0,44.4-9.13,58.91-27.4v21.39h68.29V57.8h-68.29Z"/>
+        </g>
+        <g>
+          <path class="mlc-2" d="M486,166.54c0,6.46-1.27,12.74-3.77,18.65-2.41,5.7-5.87,10.83-10.26,15.22-4.4,4.4-9.52,7.85-15.22,10.26-5.91,2.5-12.18,3.77-18.65,3.77s-12.74-1.27-18.65-3.77c-5.7-2.41-10.83-5.87-15.22-10.26-4.4-4.4-7.85-9.52-10.26-15.22-2.5-5.91-3.77-12.18-3.77-18.65,0-24.41,13.77-40.58,25.91-54.85,6.95-8.16,13.51-15.87,16.63-24.13.84-2.23,2.91-3.66,5.29-3.66h.07c2.4.03,4.47,1.51,5.27,3.79,2.91,8.29,9.6,16.1,16.68,24.37,12.16,14.21,25.95,30.31,25.95,54.48h0Z"/>
+          <path class="mlc-3" d="M481.69,166.54c0,24.07-19.51,43.59-43.59,43.59s-43.59-19.51-43.59-43.59c0-36.56,33.25-53.61,42.26-77.46.45-1.18,2.11-1.16,2.53.03,8.32,23.68,42.39,40.89,42.39,77.42h0Z"/>
+          <path class="mlc-1" d="M481.69,166.54c0,24.07-19.51,43.59-43.59,43.59-19.29,0-35.66-12.53-41.4-29.9,9.5,11.36,25.25,17.42,39.89,14.8,4.87-.87,9.6-2.63,13.75-5.32,12.33-7.99,18.24-24.66,13.7-38.63-3.06-9.41-10.03-16.93-15.34-25.28-7.93-12.48-12.31-20.09-10.13-37.48.32.14.6.4.74.8,8.32,23.68,42.39,40.89,42.39,77.42h-.01Z"/>
+          <path class="mlc-3" d="M405.32,154.39c.66-10.21,8.51-19.2,14.75-26.77,2.28-2.71,4.66-5.55,6.88-8.31.2-.25.64-.8.85-1.06.29-.37.58-.73.89-1.09.33-.39.92-.43,1.3-.1.27.24.38.6.29.93-.12.46-.26.92-.4,1.37-.28.87-.65,1.82-1,2.67-4.67,11-14.17,18.98-19.99,29.22-.22.37-.43.79-.63,1.16-.43.81-.81,1.63-1.21,2.45-.46.87-1.78.52-1.73-.47h0Z"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg></a>
+    <div class="navlinks">
+      <a href="#system">System</a><a href="#problem">Problem</a><a href="#benefits">Benefits</a>
+      <a href="#cost">Cost</a><a href="#proof">Proof</a><a href="#next">Next steps</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <svg class="ripple" viewBox="0 0 1440 600" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke="#fff" stroke-width="1.1">
+      <path d="M0,150 C240,90 480,210 720,150 C960,90 1200,210 1440,150"/>
+      <path d="M0,240 C240,180 480,300 720,240 C960,180 1200,300 1440,240"/>
+      <path d="M0,330 C240,270 480,390 720,330 C960,270 1200,390 1440,330"/>
+      <path d="M0,420 C240,360 480,480 720,420 C960,360 1200,480 1440,420"/>
+      <path d="M0,510 C240,450 480,570 720,510 C960,450 1200,570 1440,510"/>
+    </g>
+  </svg>
+  <div class="wrap heroin">
+    <div class="herologo"><svg style="width:100%;height:auto;display:block"  data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1259.29 257.45">
+  <defs>
+    <style>
+      .mlr-1 {
+        fill: #7abbe7;
+      }
+
+      .mlr-2 {
+        fill: #165888;
+      }
+
+      .mlr-3 {
+        fill: #fff;
+      }
+
+      .mlr-4 {
+        fill: #3780b8;
+      }
+
+      .mlr-5 {
+        fill: #448cca;
+      }
+    </style>
+  </defs>
+  <g  data-name="Layer 2">
+    <g  data-name="Layer 5">
+      <g>
+        <g>
+          <path class="mlr-3" d="M0,57.8h67.93v23.64c18.51-17.76,39.28-26.65,62.3-26.65,28.52,0,50.29,12.01,65.3,36.03,15.26-24.27,37.03-36.41,65.31-36.41,9.01,0,17.51,1.31,25.52,3.94,8,2.63,14.88,6.75,20.64,12.38,5.75,5.63,10.32,12.95,13.7,21.96s5.07,19.89,5.07,32.65v124.98h-67.93v-94.95c0-9.76-.69-17.76-2.06-24.02-1.38-6.25-3.38-11.13-6.01-14.64-2.63-3.5-5.69-5.88-9.2-7.13s-7.26-1.88-11.26-1.88c-21.77,0-32.65,15.89-32.65,47.66v94.95h-67.93v-94.95c0-9.76-.63-17.83-1.88-24.21-1.26-6.38-3.07-11.45-5.44-15.2-2.38-3.75-5.44-6.32-9.19-7.69s-8.13-2.06-13.14-2.06c-4.26,0-8.26.63-12.01,1.88s-7.07,3.69-9.95,7.32-5.13,8.63-6.75,15.01c-1.63,6.38-2.44,14.7-2.44,24.96v94.95H0V57.8Z"/>
+          <path class="mlr-3" d="M675.59,114.47v135.86h-67.93V114.47h-22.52v-56.67h22.52V0h67.93v57.8h38.66v56.67h-38.66Z"/>
+          <path class="mlr-3" d="M801.05,114.47v135.86h-67.93V114.47h-22.52v-56.67h22.52V0h67.93v57.8h38.66v56.67h-38.66Z"/>
+          <path class="mlr-3" d="M909.03,165.51c0,29.27,13.76,43.91,41.28,43.91,14.76,0,25.89-6.01,33.4-18.02h65.68c-13.26,44.04-46.42,66.05-99.46,66.05-16.27,0-31.15-2.44-44.66-7.32-13.51-4.88-25.09-11.82-34.72-20.83-9.64-9.01-17.08-19.76-22.33-32.28-5.26-12.51-7.88-26.52-7.88-42.03s2.5-30.46,7.51-43.35c5-12.88,12.13-23.83,21.39-32.84,9.25-9.01,20.46-15.95,33.59-20.83s27.96-7.32,44.48-7.32,30.9,2.44,43.91,7.32c13.01,4.88,24.02,11.95,33.03,21.2,9.01,9.26,15.88,20.58,20.64,33.97,4.75,13.39,7.13,28.47,7.13,45.23v7.13h-142.99ZM988.59,126.1c-2.25-9.51-6.89-17.13-13.89-22.89-7.01-5.75-15.52-8.63-25.52-8.63-10.51,0-19.08,2.76-25.71,8.26-6.63,5.51-10.82,13.27-12.57,23.27h77.69Z"/>
+          <path class="mlr-3" d="M1072.25,57.8h67.93v31.53c7.25-11.51,16.14-20.33,26.65-26.46,10.51-6.13,22.77-9.19,36.78-9.19h5.82c2.12,0,4.56.25,7.32.75v64.93c-9.01-4.5-18.77-6.76-29.28-6.76-15.76,0-27.58,4.69-35.46,14.07-7.88,9.38-11.82,23.08-11.82,41.1v82.57h-67.93V57.8h-.01Z"/>
+          <path class="mlr-2" d="M1193.41,223.31c0-4.5.84-8.77,2.53-12.81,1.69-4.03,4.03-7.55,7.04-10.56,3-3,6.52-5.35,10.56-7.04,4.03-1.69,8.3-2.53,12.81-2.53s8.77.84,12.81,2.53c4.03,1.69,7.55,4.04,10.56,7.04,3,3,5.35,6.52,7.04,10.56,1.69,4.04,2.53,8.3,2.53,12.81s-.85,8.77-2.53,12.81c-1.69,4.04-4.04,7.56-7.04,10.56-3.01,3-6.52,5.35-10.56,7.04-4.04,1.69-8.31,2.53-12.81,2.53s-8.77-.84-12.81-2.53-7.56-4.03-10.56-7.04c-3.01-3-5.35-6.52-7.04-10.56-1.69-4.03-2.53-8.3-2.53-12.81h0Z"/>
+          <path class="mlr-3" d="M500.36,57.8v.02s-.01,19.14-.01,19.14c-15.76-16.76-35.65-25.15-59.67-25.15-14.26,0-27.27,2.69-39.03,8.07-11.76,5.39-21.9,12.71-30.4,21.96-8.51,9.25-15.14,20.07-19.89,32.46-4.75,12.39-7.13,25.46-7.13,39.22,0,14.77,2.44,28.4,7.32,40.91,4.88,12.51,11.7,23.4,20.46,32.65,8.75,9.26,19.01,16.45,30.77,21.58,11.76,5.12,24.64,7.69,38.66,7.69,24.77,0,44.41-9.13,58.92-27.4v21.39h68.31V57.8h-68.31Z"/>
+        </g>
+        <g>
+          <path class="mlr-3" d="M486.28,166.54c0,6.46-1.27,12.74-3.77,18.65-2.41,5.7-5.87,10.83-10.26,15.22-4.4,4.4-9.52,7.85-15.22,10.26-5.91,2.5-12.18,3.77-18.65,3.77s-12.74-1.27-18.65-3.77c-5.7-2.41-10.83-5.87-15.22-10.26-4.4-4.4-7.85-9.52-10.26-15.22-2.5-5.91-3.77-12.18-3.77-18.65,0-24.41,13.77-40.58,25.91-54.85,6.95-8.16,13.51-15.87,16.63-24.13.84-2.23,2.91-3.66,5.29-3.66h.07c2.4.03,4.47,1.51,5.27,3.79,2.91,8.29,9.6,16.1,16.68,24.37,12.16,14.21,25.95,30.31,25.95,54.48h0Z"/>
+          <path class="mlr-5" d="M481.97,166.54c0,24.07-19.51,43.59-43.59,43.59s-43.59-19.51-43.59-43.59c0-36.56,33.25-53.61,42.26-77.46.45-1.18,2.11-1.16,2.53.03,8.32,23.68,42.39,40.89,42.39,77.42h0Z"/>
+          <path class="mlr-4" d="M481.97,166.54c0,24.07-19.51,43.59-43.59,43.59-19.29,0-35.66-12.53-41.4-29.9,9.5,11.36,25.25,17.42,39.89,14.8,4.87-.87,9.6-2.63,13.75-5.32,12.33-7.99,18.24-24.66,13.7-38.63-3.06-9.41-10.03-16.93-15.34-25.28-7.93-12.48-12.31-20.09-10.13-37.48.32.14.6.4.74.8,8.32,23.68,42.39,40.89,42.39,77.42h0Z"/>
+          <path class="mlr-1" d="M405.6,154.39c.66-10.21,8.51-19.2,14.75-26.77,2.28-2.71,4.66-5.55,6.88-8.31.2-.25.64-.8.85-1.06.29-.37.58-.73.89-1.09.33-.39.92-.43,1.3-.1.27.24.38.6.29.93-.12.46-.26.92-.4,1.37-.28.87-.65,1.82-1,2.67-4.67,11-14.17,18.98-19.99,29.22-.22.37-.43.79-.63,1.16-.43.81-.81,1.63-1.21,2.45-.46.87-1.78.52-1.73-.47h0Z"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="eyebrow"><span class="dot"></span> Meridian Flood Intelligence</div>
+    <h1>Flood early warning for <span class="accent">your council</span><span class="pk">.</span></h1>
+    <p class="lede">A briefing for local government on protecting your community with sensing that
+      sees a flood coming — hours before the water rises.</p>
+    <div class="meta">
+      <div><b>Document</b><span>One-page council briefing</span></div>
+      <div><b>Prepared by</b><span>Matter IO Pty Ltd</span></div>
+      <div><b>Date</b><span>June 2026</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="alt" id="what">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">What is Meridian</span>
+      <h2>A system that detects flood risk before it reaches your streets</h2>
+      <p class="sub">Meridian is a flood early warning system that protects your community by
+        detecting flood risks hours before flooding occurs.</p>
+    </div>
+    <div class="steps mt rv">
+      <div class="step"><div class="n">1</div><p><strong>StormSense</strong> water sensors and
+        <strong>StormSight</strong> cameras are placed at high-risk locations — bridges, underpasses
+        and stormwater pits.</p></div>
+      <div class="step"><div class="n">2</div><p>Artificial intelligence analyses video, water levels
+        and weather locally, at the roadside, to predict flooding.</p></div>
+      <div class="step"><div class="n">3</div><p>Your council receives a <strong>45–90 minute
+        warning</strong> before flooding happens, through <strong>StormPilot</strong>.</p></div>
+      <div class="step"><div class="n">4</div><p><strong>StormGate</strong> signage closes the
+        floodway, and alerts go to residents' phones and emergency services.</p></div>
+    </div>
+    <div class="callout rv"><div class="kd">Result</div>
+      <p>More time to <strong>evacuate people</strong>, close roads, and protect infrastructure.</p></div>
+  </div>
+</section>
+
+<section id="system">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">The Meridian system</span>
+      <h2>Four parts, one job</h2>
+      <p class="sub">Meridian is the platform your council procures. These are the four components
+        that make it work in the field.</p>
+    </div>
+    <div class="grid g2 mt rv">
+      <div class="card"><span class="chip">Sense</span><h3>StormSense</h3>
+        <p>In-pit water level and flow sensors. Battery-powered, IP68, no trenching or mains power required.</p></div>
+      <div class="card"><span class="chip">Sense</span><h3>StormSight</h3>
+        <p>Roadside vision. Reads water depth, debris and blockage from the camera feed — interpretation
+          happens on the device, not in a data centre.</p></div>
+      <div class="card"><span class="chip act">Act</span><h3>StormGate</h3>
+        <p>Floodway signage that responds to what the sensors see — warning motorists before a crossing
+          becomes impassable.</p></div>
+      <div class="card"><span class="chip act">Act</span><h3>StormPilot</h3>
+        <p>The operator view. Live conditions, alert thresholds, historical patterns, and the reasoning
+          behind every warning issued.</p></div>
+    </div>
+    <div class="callout rv"><div class="kd">In short</div>
+      <p><strong>StormSense</strong> feels the water. <strong>StormSight</strong> sees it.
+        <strong>StormGate</strong> closes the road. <strong>StormPilot</strong> tells you why.
+        Between sensing and acting sits Meridian's edge intelligence — the reasoning runs at the
+        roadside, so a storm event never depends on a working connection to a distant server.</p></div>
+  </div>
+</section>
+
+<section class="alt" id="problem">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag pk">The problem we're solving</span>
+      <h2>Today's warnings arrive too late</h2>
+      <p class="sub">Meridian changes that.</p>
+    </div>
+    <div class="cmp mt rv">
+      <div class="panel"><h4>Current challenges</h4><ul>
+        <li><span class="mk no">✕</span>Warnings arrive too late — after flooding has already started.</li>
+        <li><span class="mk no">✕</span>Single point of failure — if one sensor breaks, you're blind.</li>
+        <li><span class="mk no">✕</span>False alarms — too many false alerts mean people ignore warnings.</li>
+        <li><span class="mk no">✕</span>Expensive to operate — cloud-based systems cost $939K over 3 years.</li>
+        <li><span class="mk no">✕</span>Data privacy concerns — flood data stored overseas.</li>
+      </ul></div>
+      <div class="panel win"><h4>The Meridian advantage</h4><ul>
+        <li><span class="mk yes">✓</span>45–90 minute warning — hours before flooding.</li>
+        <li><span class="mk yes">✓</span>Redundant system — if one sensor fails, others still monitor.</li>
+        <li><span class="mk yes">✓</span>96% accuracy — minimal false alarms, so people trust alerts.</li>
+        <li><span class="mk yes">✓</span>54% cheaper — $430K vs. $939K over 3 years.</li>
+        <li><span class="mk yes">✓</span>Data stays in Australia — sovereign and secure.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Key benefits</span>
+      <h2>Seven ways Meridian protects your community</h2>
+    </div>
+    <div class="tblwrap mt rv"><table class="tbl">
+      <thead><tr><th style="width:30%">Benefit</th><th>Impact</th></tr></thead><tbody>
+      <tr><td>Community safety</td><td>Residents evacuate safely; fewer injuries and deaths during floods.</td></tr>
+      <tr><td>Infrastructure protection</td><td>Warnings give time to close floodgates, redirect traffic, and activate emergency protocols.</td></tr>
+      <tr><td>Cost savings</td><td>$1M+ in prevented property damage per significant flood event.</td></tr>
+      <tr><td>Emergency response</td><td>Faster, more coordinated response — all agencies on the same page.</td></tr>
+      <tr><td>Insurance savings</td><td>Improved flood preparedness may lower insurance premiums.</td></tr>
+      <tr><td>Year-round utility</td><td>Between storms, the StormSense mesh works as a live condition survey of your pit network.</td></tr>
+      <tr><td>Community confidence</td><td>Clear, reliable alerts build public trust.</td></tr>
+      </tbody></table></div>
+
+    <div class="mt rv">
+      <span class="tag pk">The other 350 days</span>
+      <h2>Maintenance you can plan</h2>
+      <p class="sub">Floods are episodic. The StormSense mesh is not — it reports continuously from
+        inside your stormwater pits every day of the year, which turns pit maintenance from a
+        scheduled guess into a targeted response.</p>
+    </div>
+    <div class="grid g3 mt-s rv">
+      <div class="card"><h3>Inspect by condition, not calendar</h3><ul class="rlist">
+        <li>Cyclic inspection visits every pit at the same interval, whether or not it needs attention</li>
+        <li>StormSense flags which pits are filling, silting or draining slowly</li>
+        <li>Crews are sent where the data points, not down a list</li></ul></div>
+      <div class="card"><h3>Blockages found before the storm</h3><ul class="rlist">
+        <li>A pit that drains slower than its own history is showing early blockage</li>
+        <li>Detected in dry weather, when clearing is cheap, safe and unhurried</li>
+        <li>Field-validated blockage detection in live council deployment</li></ul></div>
+      <div class="card"><h3>Evidence for asset planning</h3><ul class="rlist">
+        <li>Multi-year condition history per pit, not per catchment</li>
+        <li>Identifies chronic problem assets that justify capital renewal</li>
+        <li>Supports asset management plans and defensible budget submissions</li></ul></div>
+    </div>
+    <div class="callout rv"><div class="kd">Why it matters</div>
+      <p>The mesh earns its keep in the dry season. A council that never floods in a given year still
+        gets a full year of condition data on the network it is already obligated to maintain — and
+        <strong>every blockage cleared before the storm is one less flood to warn about</strong>.</p></div>
+  </div>
+</section>
+
+<section class="alt" id="scale">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Scale</span>
+      <h2>How many sensors does my council need?</h2>
+      <p class="sub">Rule of thumb: 100 sensors per 10–15 km of high-risk waterways.</p>
+    </div>
+    <div class="tblwrap mt rv"><table class="tbl">
+      <thead><tr><th>Council type</th><th>Population</th><th>Typical deployment</th></tr></thead><tbody>
+      <tr><td>Small regional</td><td>20K–50K</td><td class="num">10–50 sensors</td></tr>
+      <tr><td>Medium city</td><td>50K–200K</td><td class="num">100–3,000 sensors</td></tr>
+      <tr><td>Large metro</td><td>200K+</td><td class="num">3,000+ sensors</td></tr>
+      </tbody></table></div>
+    <div class="callout rv"><div class="kd">Case study</div>
+      <p><strong>Monash Council, Melbourne.</strong> Population 180K · first deployment (2022) of
+        25 sensors · fully operational with a 5+ year proven track record.</p></div>
+  </div>
+</section>
+
+<section id="cost">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Cost breakdown</span>
+      <h2>Transparent, predictable pricing</h2>
+      <p class="sub">Example: a 15-sensor council.</p>
+    </div>
+    <div class="grid g2 mt rv">
+      <div class="tblwrap"><h4 style="margin-bottom:18px">One-time capital cost</h4><table class="tbl">
+        <thead><tr><th>Item</th><th>Cost</th></tr></thead><tbody>
+        <tr><td>Hardware (15 StormSense units + StormSight cameras)</td><td class="num">$30,000</td></tr>
+        <tr><td>Installation &amp; training</td><td class="num">$15,000</td></tr>
+        <tr><td>Network infrastructure (LoRaWAN + LTE)</td><td class="num">$5,000</td></tr>
+        <tr class="total"><td>Total capital</td><td class="num">$50,000</td></tr>
+        </tbody></table></div>
+      <div class="tblwrap"><h4 style="margin-bottom:18px">Annual operating cost</h4><table class="tbl">
+        <thead><tr><th>Item</th><th>Cost</th></tr></thead><tbody>
+        <tr><td>Software subscription (NMS integration, updates, support)</td><td class="num">$30,000</td></tr>
+        <tr><td>Maintenance &amp; repair</td><td class="num">$5,000</td></tr>
+        <tr><td>Connectivity (data)</td><td class="num">$2,000</td></tr>
+        <tr class="total"><td>Total annual</td><td class="num">$37,000</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="stats mt rv">
+      <div class="stat"><div class="v">$50K</div><div class="l">Capital</div></div>
+      <div class="stat"><div class="v">$185K</div><div class="l">Operations · 5 × $37K</div></div>
+      <div class="stat"><div class="v">$235K</div><div class="l">Total 5-year</div></div>
+      <div class="stat"><div class="v">$0.26</div><div class="l">Per person / year</div></div>
+    </div>
+    <div class="callout rv"><div class="kd">Per warning</div>
+      <p>Cost per early warning: <strong>~$5,000–$10,000</strong> — against $1M+ in prevented flood damage.</p></div>
+  </div>
+</section>
+
+<section class="alt" id="roi">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag pk">Return on investment</span>
+      <h2>The 2022 Queensland / NSW floods, compared</h2>
+    </div>
+    <div class="cmp mt rv">
+      <div class="panel"><h4>Without Meridian</h4><ul>
+        <li><span class="mk no">✕</span>Property damage — $200M</li>
+        <li><span class="mk no">✕</span>Lives at risk — potentially hundreds</li>
+        <li><span class="mk no">✕</span>Recovery time — months to years</li>
+      </ul></div>
+      <div class="panel win"><h4>With Meridian</h4><ul>
+        <li><span class="mk yes">✓</span>Property damage — $40M</li>
+        <li><span class="mk yes">✓</span>Lives saved — high confidence</li>
+        <li><span class="mk yes">✓</span>Recovery time — weeks</li>
+        <li><span class="mk yes">✓</span>Net benefit — $150M</li>
+      </ul></div>
+    </div>
+    <div class="callout rv"><div class="kd">ROI</div>
+      <p><strong>638× return</strong> — $150M net benefit against $235K five-year cost. Even a
+        1-in-20-year major flood event pays for Meridian many times over in damage prevention.</p></div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Timeline &amp; implementation</span>
+      <h2>Live in six months</h2>
+    </div>
+    <div class="tl rv">
+      <div class="tlrow"><div class="mark">1–2</div><h3>Planning &amp; assessment</h3><ul class="rlist">
+        <li>Matter team visits your council</li>
+        <li>Identify high-risk locations — bridges, underpasses, culverts</li>
+        <li>Finalise StormSense / StormSight placement &amp; network design</li>
+        <li>Estimate total deployment</li></ul></div>
+      <div class="tlrow"><div class="mark">3–4</div><h3>Installation</h3><ul class="rlist">
+        <li>Hardware ordered &amp; delivered</li>
+        <li>Field installation at selected sites</li>
+        <li>Network testing — LoRaWAN + LTE coverage</li>
+        <li>Initial staff training</li></ul></div>
+      <div class="tlrow"><div class="mark">5</div><h3>Operational testing</h3><ul class="rlist">
+        <li>System runs in monitoring mode, no public alerts yet</li>
+        <li>Validate accuracy on your local conditions</li>
+        <li>Refine alert thresholds</li></ul></div>
+      <div class="tlrow"><div class="mark">6</div><h3>Live deployment</h3><ul class="rlist">
+        <li>System goes live</li>
+        <li>Public alerts begin, integrated into council emergency systems</li>
+        <li>Ongoing support &amp; optimisation</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="integration">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Integration</span>
+      <h2>Adds capability without replacing what you have</h2>
+    </div>
+    <div class="grid g3 mt rv">
+      <div class="card"><h3>National Messaging System</h3><ul class="rlist">
+        <li>Automatic integration with BoM / Emergency Management</li>
+        <li>Alerts reach residents on their mobile phones</li>
+        <li>160-metre geotargeting — only affected areas alerted</li></ul></div>
+      <div class="card"><h3>StormPilot dashboard</h3><ul class="rlist">
+        <li>Real-time visibility of all StormSense and StormSight data</li>
+        <li>Custom alert thresholds to your preferences</li>
+        <li>Historical analysis of patterns over time</li>
+        <li>Integration with council GIS / mapping</li></ul></div>
+      <div class="card"><h3>Emergency services</h3><ul class="rlist">
+        <li>Direct feed to SES, QFES or relevant agency</li>
+        <li>Shared situational awareness dashboard</li>
+        <li>Automated escalation protocols</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Proven in the field</span>
+      <h2>Performance across live council deployments</h2>
+      <p class="sub">Meridian is not a pilot concept. StormSense and StormSight are operating today
+        across Australian council networks, through real storm seasons, in real catchments.</p>
+    </div>
+    <div class="stats mt rv">
+      <div class="stat"><div class="v">2–3%</div><div class="l">False alarm rate</div></div>
+      <div class="stat"><div class="v">52 min</div><div class="l">Avg. warning lead time</div></div>
+      <div class="stat"><div class="v">99.8%</div><div class="l">Uptime</div></div>
+      <div class="stat"><div class="v">96%</div><div class="l">Detection accuracy</div></div>
+    </div>
+    <p class="sub mt-s rv">Reference sites and site visits are available on request — including live
+      blockage detection validated in the field.</p>
+  </div>
+</section>
+
+<section class="alt" id="funding">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag pk">Funding opportunities</span>
+      <h2>You don't have to pay upfront</h2>
+    </div>
+    <div class="grid g2 mt rv">
+      <div class="card"><span class="chip">Option 1</span><h3>Disaster Ready Fund contribution</h3><ul class="rlist">
+        <li>Matter provides capital infrastructure — $30K StormSense / StormSight hardware</li>
+        <li>Your council provides operating budget — $37K/year</li>
+        <li>Result: free hardware, manageable annual cost</li></ul></div>
+      <div class="card"><span class="chip">Option 2</span><h3>Government grants</h3><ul class="rlist">
+        <li>State emergency management grants</li>
+        <li>Federal climate adaptation funding</li>
+        <li>Water management grants</li></ul></div>
+      <div class="card"><span class="chip">Option 3</span><h3>Insurance partnership</h3><ul class="rlist">
+        <li>Work with your insurance provider</li>
+        <li>Potential premium reductions offset costs</li>
+        <li>Insurers benefit from lower claims</li></ul></div>
+      <div class="card"><span class="chip">Option 4</span><h3>Cost-sharing with neighbours</h3><ul class="rlist">
+        <li>Councils in the same catchment share regional infrastructure</li>
+        <li>Significantly reduces per-council cost</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Next steps</span>
+      <h2>If you're interested</h2>
+    </div>
+    <div class="tl rv">
+      <div class="tlrow"><div class="mark">1</div><h3>Free consultation</h3>
+        <p class="sub" style="margin-top:8px">Contact the Matter team — hello@matter.city · +61 8 9207 7755</p></div>
+      <div class="tlrow"><div class="mark">2</div><h3>Schedule a site visit</h3>
+        <p class="sub" style="margin-top:8px">Matter visits your council within 4–6 weeks, identifies
+          optimal StormSense and StormSight locations, and discusses integration with your emergency systems.</p></div>
+      <div class="tlrow"><div class="mark">3</div><h3>Feasibility study (optional)</h3>
+        <p class="sub" style="margin-top:8px">Detailed catchment assessment, hydraulic modelling of
+          flood propagation, and a customised cost estimate, delivered with our accredited engineering partners.</p></div>
+      <div class="tlrow"><div class="mark">4</div><h3>Pilot program — 3–6 months</h3>
+        <p class="sub" style="margin-top:8px">Deploy 3–5 StormSense units in your highest-risk area.
+          A pilot of this length proves siting, connectivity, uptime, blockage detection and the
+          maintenance workflow against your own network. Flood-response accuracy is established over
+          a full storm season, so the pilot is a readiness check rather than a wet-weather trial —
+          then decide on full rollout.</p></div>
+      <div class="tlrow"><div class="mark">5</div><h3>Flood consultancy program</h3>
+        <p class="sub" style="margin-top:8px">Where a council needs certified hydrologic or hydraulic
+          assessment, Matter delivers it through accredited engineering partners. Meridian supplies
+          the field data; the partner provides the certified engineering opinion.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="faq">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Questions &amp; answers</span>
+      <h2>The things councils ask first</h2>
+    </div>
+    <div class="mt rv">
+      <details open><summary>What if the internet goes down?</summary><div class="body">
+        Meridian is built so that no single connection failure can silence it. Detection is fully
+        autonomous — StormSense and StormSight reason locally at the roadside and keep monitoring for
+        <strong>7–14 days without any network at all</strong>, caching alerts and transmitting them the
+        moment a path is restored. For getting alerts out, Meridian carries independent layers:
+        terrestrial mobile (LTE-M / NB-IoT) as the everyday path, Starlink satellite backhaul at
+        cluster sites, and satellite IoT as a low-bandwidth fallback that reaches orbit directly from
+        the field. Each operates independently — losing the mobile network, or losing mains power,
+        does not take the system offline.</div></details>
+      <details><summary>Is this just another cloud system?</summary><div class="body">
+        No. All processing happens locally on edge devices. Only encrypted alert signals leave the
+        site. Your flood data stays in Australia.</div></details>
+      <details><summary>What about privacy?</summary><div class="body">
+        StormSight never stores raw video centrally. Alerts contain only threat-level intelligence —
+        for example "flood warning: impassable water at Bridge St". No personal information is
+        extracted.</div></details>
+      <details><summary>How often do sensors need replacement?</summary><div class="body">
+        Hardware typically lasts 10 years. Batteries last 5–10 years depending on surge usage. Both
+        are easily replaceable in the field.</div></details>
+      <details><summary>Can this predict extreme events, such as 100-year floods?</summary><div class="body">
+        Yes, with lower confidence. Meridian is strongest for frequent and moderate events.</div></details>
+      <details><summary>Will this replace emergency services?</summary><div class="body">
+        No. Meridian is a tool that enhances SES / emergency response and will feed into the new
+        AusAlert system. Humans remain in control.</div></details>
+    </div>
+  </div>
+</section>
+
+<section id="commitment">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Our commitment</span>
+      <h2>If your council joins Meridian</h2>
+    </div>
+    <div class="grid g3 mt rv">
+      <div class="card"><h3>Free hardware</h3><p>Capital cost covered by Matter / DRF funding.</p></div>
+      <div class="card"><h3>5-year support guarantee</h3><p>24/7 technical support.</p></div>
+      <div class="card"><h3>Continuous improvement</h3><p>AI model improves annually.</p></div>
+      <div class="card"><h3>Regular training</h3><p>Staff keep skills current.</p></div>
+      <div class="card"><h3>Community engagement</h3><p>Materials to help explain Meridian to residents.</p></div>
+      <div class="card"><h3>Downloads on request</h3><p>Full technical brief (40 pages) · investor pitch
+        deck (14 slides) · Disaster Ready Fund application (v3.1).</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final" id="contact">
+  <div class="wrap">
+    <div class="rv">
+      <span class="tag">Contact &amp; resources</span>
+      <h2>Let's talk</h2>
+      <p class="sub">The fastest, most accurate, most affordable flood early warning available today.</p>
+    </div>
+    <div class="grid g3 mt rv">
+      <div class="fcard"><h4>General enquiries</h4><p>The Matter Team<br>Meridian Council Programs<br>
+        <a href="mailto:hello@matter.city">hello@matter.city</a><br>+61 8 9207 7755</p></div>
+      <div class="fcard"><h4>Technical questions</h4><p>The Matter Team<br>Meridian Engineering<br>
+        <a href="mailto:hello@matter.city">hello@matter.city</a></p></div>
+      <div class="fcard"><h4>Partnerships</h4><p>Partnership Manager<br>
+        <a href="mailto:partnerships@matter.city">partnerships@matter.city</a><br>
+        <a href="https://matter.city/meridian">matter.city/meridian</a></p></div>
+    </div>
+    <a class="cta rv" href="mailto:hello@matter.city">Talk to the Matter team — free consultation →</a>
+    <p class="sub rv" style="margin-top:26px;font-size:.9rem">Next council meetings · 15 Jun · 20 Jul · 10 Aug 2026</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fin">
+    <div class="footlogo"><svg style="width:100%;height:auto;display:block"  data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1259.29 257.45">
+  <defs>
+    <style>
+      .mlf-1 {
+        fill: #7abbe7;
+      }
+
+      .mlf-2 {
+        fill: #165888;
+      }
+
+      .mlf-3 {
+        fill: #fff;
+      }
+
+      .mlf-4 {
+        fill: #3780b8;
+      }
+
+      .mlf-5 {
+        fill: #448cca;
+      }
+    </style>
+  </defs>
+  <g  data-name="Layer 2">
+    <g  data-name="Layer 5">
+      <g>
+        <g>
+          <path class="mlf-3" d="M0,57.8h67.93v23.64c18.51-17.76,39.28-26.65,62.3-26.65,28.52,0,50.29,12.01,65.3,36.03,15.26-24.27,37.03-36.41,65.31-36.41,9.01,0,17.51,1.31,25.52,3.94,8,2.63,14.88,6.75,20.64,12.38,5.75,5.63,10.32,12.95,13.7,21.96s5.07,19.89,5.07,32.65v124.98h-67.93v-94.95c0-9.76-.69-17.76-2.06-24.02-1.38-6.25-3.38-11.13-6.01-14.64-2.63-3.5-5.69-5.88-9.2-7.13s-7.26-1.88-11.26-1.88c-21.77,0-32.65,15.89-32.65,47.66v94.95h-67.93v-94.95c0-9.76-.63-17.83-1.88-24.21-1.26-6.38-3.07-11.45-5.44-15.2-2.38-3.75-5.44-6.32-9.19-7.69s-8.13-2.06-13.14-2.06c-4.26,0-8.26.63-12.01,1.88s-7.07,3.69-9.95,7.32-5.13,8.63-6.75,15.01c-1.63,6.38-2.44,14.7-2.44,24.96v94.95H0V57.8Z"/>
+          <path class="mlf-3" d="M675.59,114.47v135.86h-67.93V114.47h-22.52v-56.67h22.52V0h67.93v57.8h38.66v56.67h-38.66Z"/>
+          <path class="mlf-3" d="M801.05,114.47v135.86h-67.93V114.47h-22.52v-56.67h22.52V0h67.93v57.8h38.66v56.67h-38.66Z"/>
+          <path class="mlf-3" d="M909.03,165.51c0,29.27,13.76,43.91,41.28,43.91,14.76,0,25.89-6.01,33.4-18.02h65.68c-13.26,44.04-46.42,66.05-99.46,66.05-16.27,0-31.15-2.44-44.66-7.32-13.51-4.88-25.09-11.82-34.72-20.83-9.64-9.01-17.08-19.76-22.33-32.28-5.26-12.51-7.88-26.52-7.88-42.03s2.5-30.46,7.51-43.35c5-12.88,12.13-23.83,21.39-32.84,9.25-9.01,20.46-15.95,33.59-20.83s27.96-7.32,44.48-7.32,30.9,2.44,43.91,7.32c13.01,4.88,24.02,11.95,33.03,21.2,9.01,9.26,15.88,20.58,20.64,33.97,4.75,13.39,7.13,28.47,7.13,45.23v7.13h-142.99ZM988.59,126.1c-2.25-9.51-6.89-17.13-13.89-22.89-7.01-5.75-15.52-8.63-25.52-8.63-10.51,0-19.08,2.76-25.71,8.26-6.63,5.51-10.82,13.27-12.57,23.27h77.69Z"/>
+          <path class="mlf-3" d="M1072.25,57.8h67.93v31.53c7.25-11.51,16.14-20.33,26.65-26.46,10.51-6.13,22.77-9.19,36.78-9.19h5.82c2.12,0,4.56.25,7.32.75v64.93c-9.01-4.5-18.77-6.76-29.28-6.76-15.76,0-27.58,4.69-35.46,14.07-7.88,9.38-11.82,23.08-11.82,41.1v82.57h-67.93V57.8h-.01Z"/>
+          <path class="mlf-2" d="M1193.41,223.31c0-4.5.84-8.77,2.53-12.81,1.69-4.03,4.03-7.55,7.04-10.56,3-3,6.52-5.35,10.56-7.04,4.03-1.69,8.3-2.53,12.81-2.53s8.77.84,12.81,2.53c4.03,1.69,7.55,4.04,10.56,7.04,3,3,5.35,6.52,7.04,10.56,1.69,4.04,2.53,8.3,2.53,12.81s-.85,8.77-2.53,12.81c-1.69,4.04-4.04,7.56-7.04,10.56-3.01,3-6.52,5.35-10.56,7.04-4.04,1.69-8.31,2.53-12.81,2.53s-8.77-.84-12.81-2.53-7.56-4.03-10.56-7.04c-3.01-3-5.35-6.52-7.04-10.56-1.69-4.03-2.53-8.3-2.53-12.81h0Z"/>
+          <path class="mlf-3" d="M500.36,57.8v.02s-.01,19.14-.01,19.14c-15.76-16.76-35.65-25.15-59.67-25.15-14.26,0-27.27,2.69-39.03,8.07-11.76,5.39-21.9,12.71-30.4,21.96-8.51,9.25-15.14,20.07-19.89,32.46-4.75,12.39-7.13,25.46-7.13,39.22,0,14.77,2.44,28.4,7.32,40.91,4.88,12.51,11.7,23.4,20.46,32.65,8.75,9.26,19.01,16.45,30.77,21.58,11.76,5.12,24.64,7.69,38.66,7.69,24.77,0,44.41-9.13,58.92-27.4v21.39h68.31V57.8h-68.31Z"/>
+        </g>
+        <g>
+          <path class="mlf-3" d="M486.28,166.54c0,6.46-1.27,12.74-3.77,18.65-2.41,5.7-5.87,10.83-10.26,15.22-4.4,4.4-9.52,7.85-15.22,10.26-5.91,2.5-12.18,3.77-18.65,3.77s-12.74-1.27-18.65-3.77c-5.7-2.41-10.83-5.87-15.22-10.26-4.4-4.4-7.85-9.52-10.26-15.22-2.5-5.91-3.77-12.18-3.77-18.65,0-24.41,13.77-40.58,25.91-54.85,6.95-8.16,13.51-15.87,16.63-24.13.84-2.23,2.91-3.66,5.29-3.66h.07c2.4.03,4.47,1.51,5.27,3.79,2.91,8.29,9.6,16.1,16.68,24.37,12.16,14.21,25.95,30.31,25.95,54.48h0Z"/>
+          <path class="mlf-5" d="M481.97,166.54c0,24.07-19.51,43.59-43.59,43.59s-43.59-19.51-43.59-43.59c0-36.56,33.25-53.61,42.26-77.46.45-1.18,2.11-1.16,2.53.03,8.32,23.68,42.39,40.89,42.39,77.42h0Z"/>
+          <path class="mlf-4" d="M481.97,166.54c0,24.07-19.51,43.59-43.59,43.59-19.29,0-35.66-12.53-41.4-29.9,9.5,11.36,25.25,17.42,39.89,14.8,4.87-.87,9.6-2.63,13.75-5.32,12.33-7.99,18.24-24.66,13.7-38.63-3.06-9.41-10.03-16.93-15.34-25.28-7.93-12.48-12.31-20.09-10.13-37.48.32.14.6.4.74.8,8.32,23.68,42.39,40.89,42.39,77.42h0Z"/>
+          <path class="mlf-1" d="M405.6,154.39c.66-10.21,8.51-19.2,14.75-26.77,2.28-2.71,4.66-5.55,6.88-8.31.2-.25.64-.8.85-1.06.29-.37.58-.73.89-1.09.33-.39.92-.43,1.3-.1.27.24.38.6.29.93-.12.46-.26.92-.4,1.37-.28.87-.65,1.82-1,2.67-4.67,11-14.17,18.98-19.99,29.22-.22.37-.43.79-.63,1.16-.43.81-.81,1.63-1.21,2.45-.46.87-1.78.52-1.73-.47h0Z"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div>Meridian — protecting Australia's communities from flood.<br>
+      © Matter IO Pty Ltd 2026 · All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var bar=document.getElementById('bar');
+  function prog(){var h=document.documentElement;
+    var p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;bar.style.width=p+'%';}
+  document.addEventListener('scroll',prog,{passive:true});prog();
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},
+    {threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
